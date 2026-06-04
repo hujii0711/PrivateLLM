@@ -68,8 +68,6 @@ def _match_law_mst(search_xml: str, query: str) -> str | None:
     # 바로 아래에 행 요소들이 있고, 각 행에 두 태그가 함께 들어 있다.
     for row in root.iter():
         name_el = row.find("법령명한글")
-        if name_el is None:
-            name_el = row.find("MST")
         mst_el = row.find("법령일련번호")
         if mst_el is None or not (mst_el.text and mst_el.text.strip()):
             continue
@@ -84,12 +82,6 @@ def _match_law_mst(search_xml: str, query: str) -> str | None:
 
 def _write(path: Path, obj: dict) -> None:
     path.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
-
-
-def _first(xml_text: str, tag: str) -> str | None:
-    root = etree.fromstring(xml_text.encode("utf-8"))
-    el = root.find(f".//{tag}")
-    return el.text.strip() if el is not None and el.text else None
 
 
 def _all(xml_text: str, tag: str) -> list[str]:
