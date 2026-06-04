@@ -11,7 +11,7 @@ class Settings:
     rag: RagConfig = field(default_factory=RagConfig.from_env)
     mlx_model: str = MLX_MODEL
     max_tokens: int = 768
-    temperature: float = 0.3
+    temperature: float = 0.2
 
     @classmethod
     def from_env(cls) -> "Settings":

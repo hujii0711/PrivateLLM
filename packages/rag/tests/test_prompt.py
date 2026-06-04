@@ -29,4 +29,6 @@ def test_user_message_numbers_sources_and_includes_query():
 
 def test_system_prompt_requires_citation_and_disclaimer():
     # 시스템 프롬프트가 핵심 행동 규칙을 담아야 한다
-    assert "[" in SYSTEM_PROMPT and "근거" in SYSTEM_PROMPT
+    assert "[1]" in SYSTEM_PROMPT
+    assert "법률 자문이 아닙니다" in SYSTEM_PROMPT
+    assert "근거" in SYSTEM_PROMPT
