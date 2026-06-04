@@ -21,7 +21,7 @@ def test_is_grounded_true_when_strong_hit(fake_chroma, fake_encode):
 
 
 def test_is_grounded_false_when_all_weak(fake_chroma, fake_encode):
-    # 질의에 '보증금'이 없으면 fake_encode가 [0,1] → '보증금' 청크와 직교(유사도 0)
+    # '날씨' 질의는 fake_encode가 [0,1,0] → 저장된 모든 청크([1,0,0]/[0,0,1])와 직교(유사도 0)
     cfg = RagConfig(chroma_dir=fake_chroma, top_k=3, min_similarity=0.5)
     r = Retriever(cfg, encode_fn=fake_encode)
     hits = r.retrieve("날씨가 좋네요")
