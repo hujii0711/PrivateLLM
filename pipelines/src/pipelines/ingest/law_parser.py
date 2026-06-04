@@ -10,6 +10,14 @@ _UNIT = "조문단위"
 _NO = "조문번호"
 _TITLE = "조문제목"
 
+# 본문 텍스트를 구성할 때 사용할 콘텐츠 태그.
+# 메타데이터(조문번호/조문여부/조문제목/조문시행일자/조문변경여부 등)는 제외한다.
+_CONTENT = "조문내용"  # 조문 머리말/본문 (예: "제1조(목적) ...")
+_HANG = "항"
+_HANG_TEXT = "항내용"  # 항번호 마커(①)를 이미 포함한 항 본문
+_HO = "호"
+_HO_TEXT = "호내용"  # 호번호 마커(1.)를 이미 포함한 호 본문
+
 
 def parse_law(xml_text: str) -> dict:
     root = etree.fromstring(xml_text.encode("utf-8"))
@@ -23,15 +31,37 @@ def parse_law(xml_text: str) -> dict:
         if not no:
             continue
         title = _text(unit.find(_TITLE))
-        # 조문내용 + 모든 하위 텍스트를 합쳐 본문 구성(항/호 포함)
-        parts = [t.strip() for t in unit.itertext() if t and t.strip()]
-        text = "\n".join(dict.fromkeys(parts))  # 순서 유지 중복 제거
         articles.append({
             "article_no": _normalize_no(no),
             "title": title,
-            "text": text,
+            "text": _article_text(unit),
         })
     return {"law_name": law_name, "articles": articles}
+
+
+def _article_text(unit) -> str:
+    """조문단위에서 실제 본문(조문내용 + 항/호 내용)만 추출한다.
+
+    메타데이터 형제 태그(조문번호/조문여부/조문시행일자/조문변경여부 등)는
+    제외하고, 항내용/호내용은 이미 항번호(①)·호번호(1.) 마커를 포함하므로
+    별도의 마커 태그(항번호/호번호)는 건너뛴다.
+    """
+    parts: list[str] = []
+
+    body = _text(unit.find(_CONTENT))
+    if body:
+        parts.append(body)
+
+    for hang in unit.findall(_HANG):
+        hang_text = _text(hang.find(_HANG_TEXT))
+        if hang_text:
+            parts.append(hang_text)
+        for ho in hang.findall(_HO):
+            ho_text = _text(ho.find(_HO_TEXT))
+            if ho_text:
+                parts.append(ho_text)
+
+    return "\n".join(parts)
 
 
 def _text(el) -> str:
