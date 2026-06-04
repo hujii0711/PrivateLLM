@@ -1,5 +1,10 @@
 """국가법령정보센터 lawService.do(target=prec) XML 파서."""
+import re
+
 from lxml import etree
+
+# <br>, <br/>, <br /> (대소문자/공백 무시) → 줄바꿈. 다른 각괄호 마커(<1989.12.30> 등)는 보존.
+_BR = re.compile(r"(?i)<br\s*/?>")
 
 
 def parse_prec(xml_text: str) -> dict:
@@ -20,4 +25,6 @@ def _t(root, tag: str) -> str:
     if el is None:
         return ""
     # 일부 요소는 HTML/줄바꿈을 포함 → 모든 하위 텍스트 결합
-    return "".join(el.itertext()).strip()
+    text = "".join(el.itertext())
+    text = _BR.sub("\n", text)
+    return text.strip()
