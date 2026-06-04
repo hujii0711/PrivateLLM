@@ -40,3 +40,21 @@ def test_article_text_excludes_metadata_noise(fixtures_dir):
     # 항번호 마커가 항내용 앞에 중복으로 남지 않아야 한다 (예: '①\n① ...' 금지)
     import re
     assert not re.search(r"(^|\n)([①-⑮])\n\2", art3["text"]), art3["text"][:200]
+
+
+def test_branch_articles_have_distinct_numbers(fixtures_dir):
+    xml = (fixtures_dir / "law_주택임대차보호법.xml").read_text(encoding="utf-8")
+    law = parse_law(xml)
+    nos = [a["article_no"] for a in law["articles"]]
+    # 가지조문 제3조의2(보증금의 회수)가 제3조와 구분돼 존재해야 한다
+    assert "제3조의2" in nos, nos
+    assert "제3조" in nos
+    # 모든 조문번호가 유일해야 한다 (청크 id 충돌 방지)
+    assert len(nos) == len(set(nos)), [n for n in nos if nos.count(n) > 1]
+
+
+def test_deposit_article_is_3_2(fixtures_dir):
+    xml = (fixtures_dir / "law_주택임대차보호법.xml").read_text(encoding="utf-8")
+    law = parse_law(xml)
+    by_no = {a["article_no"]: a for a in law["articles"]}
+    assert "보증금의 회수" in by_no["제3조의2"]["title"]

@@ -8,6 +8,7 @@ from lxml import etree
 _NAME = "법령명_한글"
 _UNIT = "조문단위"
 _NO = "조문번호"
+_BRANCH_NO = "조문가지번호"  # 가지조문(제3조의2 등)의 가지번호. 일반 조문엔 없음.
 _TITLE = "조문제목"
 
 # 본문 텍스트를 구성할 때 사용할 콘텐츠 태그.
@@ -30,9 +31,10 @@ def parse_law(xml_text: str) -> dict:
         no = _text(unit.find(_NO))
         if not no:
             continue
+        branch = _text(unit.find(_BRANCH_NO))
         title = _text(unit.find(_TITLE))
         articles.append({
-            "article_no": _normalize_no(no),
+            "article_no": _normalize_no(no, branch),
             "title": title,
             "text": _article_text(unit),
         })
@@ -68,6 +70,10 @@ def _text(el) -> str:
     return (el.text or "").strip() if el is not None and el.text else ""
 
 
-def _normalize_no(no: str) -> str:
+def _normalize_no(no: str, branch: str = "") -> str:
     no = no.strip()
-    return no if no.startswith("제") else f"제{no}조"
+    base = no if no.startswith("제") else f"제{no}조"
+    b = branch.strip()
+    if b and b not in ("0", ""):
+        return f"{base}의{b}"
+    return base
