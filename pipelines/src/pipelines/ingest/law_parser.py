@@ -9,6 +9,7 @@ _NAME = "법령명_한글"
 _UNIT = "조문단위"
 _NO = "조문번호"
 _BRANCH_NO = "조문가지번호"  # 가지조문(제3조의2 등)의 가지번호. 일반 조문엔 없음.
+_KIND = "조문여부"  # "조문"=실제 조문, "전문"=편/장/절/관 구조 헤더(제외 대상)
 _TITLE = "조문제목"
 
 # 본문 텍스트를 구성할 때 사용할 콘텐츠 태그.
@@ -28,6 +29,8 @@ def parse_law(xml_text: str) -> dict:
 
     articles = []
     for unit in root.iter(_UNIT):
+        if _text(unit.find(_KIND)) != "조문":
+            continue
         no = _text(unit.find(_NO))
         if not no:
             continue

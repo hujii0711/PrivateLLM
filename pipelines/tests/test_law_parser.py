@@ -58,3 +58,26 @@ def test_deposit_article_is_3_2(fixtures_dir):
     law = parse_law(xml)
     by_no = {a["article_no"]: a for a in law["articles"]}
     assert "보증금의 회수" in by_no["제3조의2"]["title"]
+
+
+def test_skips_structural_전문_headers():
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<법령><기본정보><법령명_한글>테스트법</법령명_한글></기본정보>'
+        '<조문>'
+        '<조문단위><조문여부>전문</조문여부><조문번호>1</조문번호>'
+        '<조문내용>제1편 총칙</조문내용></조문단위>'
+        '<조문단위><조문여부>전문</조문여부><조문번호>1</조문번호>'
+        '<조문내용>제1장 통칙</조문내용></조문단위>'
+        '<조문단위><조문여부>조문</조문여부><조문번호>1</조문번호>'
+        '<조문제목>목적</조문제목><조문내용>제1조(목적) 실제 조문 본문이다.</조문내용></조문단위>'
+        '<조문단위><조문여부>조문</조문여부><조문번호>2</조문번호>'
+        '<조문제목>정의</조문제목><조문내용>제2조(정의) 또 다른 조문이다.</조문내용></조문단위>'
+        '</조문></법령>'
+    )
+    law = parse_law(xml)
+    nos = [a["article_no"] for a in law["articles"]]
+    assert nos == ["제1조", "제2조"], nos          # 전문 헤더 제외
+    assert len(nos) == len(set(nos))                # 중복 없음
+    assert all("제1편" not in a["text"] and "제1장" not in a["text"]
+               for a in law["articles"])            # 편/장 헤더 텍스트가 섞이지 않음
