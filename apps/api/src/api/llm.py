@@ -22,10 +22,10 @@ class FakeLLM:
 
 
 class MlxLLM:
-    """mlx-lm 기반 Qwen2.5-7B-Instruct-4bit 스트리밍 추론."""
-    def __init__(self, model_name: str = MLX_MODEL):
+    """mlx-lm 기반 Qwen2.5-7B-Instruct-4bit 스트리밍 추론. LoRA 어댑터 적용 가능."""
+    def __init__(self, model_name: str = MLX_MODEL, adapter_path: str | None = None):
         from mlx_lm import load
-        self._model, self._tokenizer = load(model_name)
+        self._model, self._tokenizer = load(model_name, adapter_path=adapter_path)
 
     def stream(self, messages: list[dict], *, max_tokens: int = 768,
                temperature: float = 0.3) -> Iterator[str]:
