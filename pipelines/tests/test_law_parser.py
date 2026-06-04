@@ -1,0 +1,83 @@
+from pipelines.ingest.law_parser import parse_law
+
+
+def test_parses_law_name_and_articles(fixtures_dir):
+    xml = (fixtures_dir / "law_주택임대차보호법.xml").read_text(encoding="utf-8")
+    law = parse_law(xml)
+
+    assert law["law_name"] == "주택임대차보호법"
+    assert law["articles"], "조문이 하나 이상 추출돼야 한다"
+
+    art = law["articles"][0]
+    assert set(art.keys()) == {"article_no", "title", "text"}
+    assert art["article_no"]            # 예: "제1조"
+    assert isinstance(art["text"], str) and art["text"].strip()
+
+
+def test_every_article_has_nonempty_text(fixtures_dir):
+    xml = (fixtures_dir / "law_주택임대차보호법.xml").read_text(encoding="utf-8")
+    law = parse_law(xml)
+    assert all(a["text"].strip() for a in law["articles"])
+
+
+def test_article_text_excludes_metadata_noise(fixtures_dir):
+    xml = (fixtures_dir / "law_주택임대차보호법.xml").read_text(encoding="utf-8")
+    law = parse_law(xml)
+    by_no = {a["article_no"]: a for a in law["articles"]}
+
+    art1 = by_no["제1조"]
+    # 본문은 실제 조문내용으로 시작해야 한다
+    assert art1["text"].startswith("제1조"), art1["text"][:80]
+    # 조문시행일자 같은 메타데이터가 본문에 섞이면 안 된다
+    assert "20260102" not in art1["text"]
+    # 조문여부 리터럴 '조문'이 줄 단독으로 들어가면 안 된다
+    assert "\n조문\n" not in ("\n" + art1["text"] + "\n")
+
+    # 다항 조문도 본문 텍스트가 실제 내용으로 시작
+    art3 = by_no["제3조"]
+    assert art3["text"].startswith("제3조"), art3["text"][:80]
+    assert "20260102" not in art3["text"]
+    # 항번호 마커가 항내용 앞에 중복으로 남지 않아야 한다 (예: '①\n① ...' 금지)
+    import re
+    assert not re.search(r"(^|\n)([①-⑮])\n\2", art3["text"]), art3["text"][:200]
+
+
+def test_branch_articles_have_distinct_numbers(fixtures_dir):
+    xml = (fixtures_dir / "law_주택임대차보호법.xml").read_text(encoding="utf-8")
+    law = parse_law(xml)
+    nos = [a["article_no"] for a in law["articles"]]
+    # 가지조문 제3조의2(보증금의 회수)가 제3조와 구분돼 존재해야 한다
+    assert "제3조의2" in nos, nos
+    assert "제3조" in nos
+    # 모든 조문번호가 유일해야 한다 (청크 id 충돌 방지)
+    assert len(nos) == len(set(nos)), [n for n in nos if nos.count(n) > 1]
+
+
+def test_deposit_article_is_3_2(fixtures_dir):
+    xml = (fixtures_dir / "law_주택임대차보호법.xml").read_text(encoding="utf-8")
+    law = parse_law(xml)
+    by_no = {a["article_no"]: a for a in law["articles"]}
+    assert "보증금의 회수" in by_no["제3조의2"]["title"]
+
+
+def test_skips_structural_전문_headers():
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<법령><기본정보><법령명_한글>테스트법</법령명_한글></기본정보>'
+        '<조문>'
+        '<조문단위><조문여부>전문</조문여부><조문번호>1</조문번호>'
+        '<조문내용>제1편 총칙</조문내용></조문단위>'
+        '<조문단위><조문여부>전문</조문여부><조문번호>1</조문번호>'
+        '<조문내용>제1장 통칙</조문내용></조문단위>'
+        '<조문단위><조문여부>조문</조문여부><조문번호>1</조문번호>'
+        '<조문제목>목적</조문제목><조문내용>제1조(목적) 실제 조문 본문이다.</조문내용></조문단위>'
+        '<조문단위><조문여부>조문</조문여부><조문번호>2</조문번호>'
+        '<조문제목>정의</조문제목><조문내용>제2조(정의) 또 다른 조문이다.</조문내용></조문단위>'
+        '</조문></법령>'
+    )
+    law = parse_law(xml)
+    nos = [a["article_no"] for a in law["articles"]]
+    assert nos == ["제1조", "제2조"], nos          # 전문 헤더 제외
+    assert len(nos) == len(set(nos))                # 중복 없음
+    assert all("제1편" not in a["text"] and "제1장" not in a["text"]
+               for a in law["articles"])            # 편/장 헤더 텍스트가 섞이지 않음
