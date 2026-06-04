@@ -4,10 +4,11 @@ import pytest
 
 @pytest.fixture
 def fake_chroma(tmp_path):
-    """결정적 2차원 가짜 임베딩으로 채운 임시 Chroma 컬렉션 경로를 돌려준다.
+    """결정적 3차원 가짜 임베딩으로 채운 임시 Chroma 컬렉션 경로를 돌려준다.
 
-    임베딩 규칙: 텍스트에 '보증금'이 있으면 [1,0], 아니면 [0,1].
-    질의도 같은 규칙으로 임베딩하면 '보증금' 청크가 가깝게 검색된다.
+    임베딩 규칙: '보증금'→[1,0,0], '날씨'→[0,1,0], 그 외→[0,0,1].
+    질의도 같은 규칙으로 임베딩하면 '보증금' 청크가 가깝게 검색되고,
+    어느 키워드도 없는 질의는 모든 청크와 직교(유사도 0)가 된다.
     """
     from rag.config import COLLECTION  # 지연 import: Task 1 전 수집 단계가 깨지지 않게
 
@@ -21,7 +22,12 @@ def fake_chroma(tmp_path):
         ("prec-1", "보증금 반환과 주택 인도는 동시이행 관계이다", "판례",
          "대법원 2020다1 임차보증금반환", "판결요지", "https://law/p1", "2021-01-15"),
     ]
-    def emb(t): return [1.0, 0.0] if "보증금" in t else [0.0, 1.0]
+    def emb(t):
+        if "보증금" in t:
+            return [1.0, 0.0, 0.0]
+        if "날씨" in t:
+            return [0.0, 1.0, 0.0]
+        return [0.0, 0.0, 1.0]
     col.add(
         ids=[r[0] for r in rows],
         documents=[r[1] for r in rows],
@@ -35,6 +41,13 @@ def fake_chroma(tmp_path):
 @pytest.fixture
 def fake_encode():
     """conftest의 fake_chroma와 동일한 임베딩 규칙."""
+    def _emb(t):
+        if "보증금" in t:
+            return [1.0, 0.0, 0.0]
+        if "날씨" in t:
+            return [0.0, 1.0, 0.0]
+        return [0.0, 0.0, 1.0]
+
     def _encode(texts):
-        return [[1.0, 0.0] if "보증금" in t else [0.0, 1.0] for t in texts]
+        return [_emb(t) for t in texts]
     return _encode
