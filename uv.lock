@@ -11,6 +11,7 @@ resolution-markers = [
 members = [
     "api",
     "eval",
+    "finetune",
     "ftdata",
     "pipelines",
     "rag",
@@ -600,6 +601,29 @@ sdist = { url = "https://files.pythonhosted.org/packages/1f/f9/f38573ed5844586db
 wheels = [
     { url = "https://files.pythonhosted.org/packages/4c/a0/614c5fe402fd88951df45f4dda2fa3b4e17a99ecd92340771929169b3b95/filelock-3.29.1-py3-none-any.whl", hash = "sha256:85199dfd706869641b72b2e8955d5416a4b2b7dc4b0e8e6d97b4cc1299a6983b", size = 40750, upload-time = "2026-06-03T15:19:02.959Z" },
 ]
+
+[[package]]
+name = "finetune"
+version = "0.1.0"
+source = { editable = "packages/finetune" }
+dependencies = [
+    { name = "api" },
+    { name = "eval" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "api", editable = "apps/api" },
+    { name = "eval", editable = "packages/eval" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.0" }]
 
 [[package]]
 name = "flatbuffers"
