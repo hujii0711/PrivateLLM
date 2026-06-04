@@ -4,6 +4,7 @@ create_app(retriever=, llm=)로 의존성을 주입(테스트). 미주입 시 �
 import json
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sse_starlette.sse import EventSourceResponse
 
 from .pipeline import run_chat
@@ -13,6 +14,12 @@ from .settings import Settings
 
 def create_app(retriever=None, llm=None, settings: Settings | None = None) -> FastAPI:
     app = FastAPI(title="보증금 반환 RAG 챗봇")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost:3000"],
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     app.state.settings = settings or Settings.from_env()
     app.state.retriever = retriever
     app.state.llm = llm
