@@ -26,14 +26,19 @@ def main() -> None:
 
     settings = Settings.from_env()
     retriever = Retriever(settings.rag)
-    llm = MlxLLM(settings.mlx_model)
-    judge_fn = lambda prompt: "".join(llm.stream(
+
+    adapter = (sys.argv[sys.argv.index("--adapter") + 1]
+               if "--adapter" in sys.argv else None)
+    gen_llm = MlxLLM(settings.mlx_model, adapter_path=adapter)
+    # judge는 양 arm 모두 base 모델로 일치시킨다(공정 비교). 어댑터 없으면 동일 인스턴스 재사용.
+    judge_llm = gen_llm if adapter is None else MlxLLM(settings.mlx_model)
+    judge_fn = lambda prompt: "".join(judge_llm.stream(
         [{"role": "user", "content": prompt}], max_tokens=16, temperature=0.0))
 
     items = load_eval_set(_EVAL_SET)
     results = []
     for i, item in enumerate(items, 1):
-        res = run_item(item, retriever=retriever, llm=llm,
+        res = run_item(item, retriever=retriever, llm=gen_llm,
                        judge_fn=judge_fn, top_k=settings.rag.top_k)
         results.append(res)
         print(f"[{i}/{len(items)}] {item.id} hit={res.retrieval_hit} "
