@@ -1,0 +1,16 @@
+{"id":"q01","question":"전세 보증금을 집주인이 안 돌려줘요. 어떻게 해야 하나요?","expected_refs":["제3조의2","제3조의3"],"must_mention":["임차권등기","보증금"]}
+{"id":"q02","question":"이사를 가야 하는데 보증금을 못 받았습니다. 임차권등기명령을 신청할 수 있나요?","expected_refs":["제3조의3"],"must_mention":["임차권등기명령"]}
+{"id":"q03","question":"확정일자를 받으면 어떤 효력이 생기나요?","expected_refs":["제3조의2"],"must_mention":["우선변제"]}
+{"id":"q04","question":"보증금을 우선변제 받으려면 어떤 요건을 갖춰야 하나요?","expected_refs":["제3조","제3조의2"],"must_mention":["대항요건","확정일자"]}
+{"id":"q05","question":"살던 집이 경매에 넘어갔는데 소액 임차인은 보증금을 먼저 받을 수 있나요?","expected_refs":["제8조"],"must_mention":["우선변제","소액"]}
+{"id":"q06","question":"임대차 기간을 따로 정하지 않으면 계약 기간은 몇 년인가요?","expected_refs":["제4조"],"must_mention":["2년"]}
+{"id":"q07","question":"계약갱신요구권은 어떻게 행사하나요?","expected_refs":["제6조의3"],"must_mention":["갱신"]}
+{"id":"q08","question":"묵시적으로 갱신된 뒤에 중간에 나가고 싶으면 어떻게 하나요?","expected_refs":["제6조의2"],"must_mention":["해지"]}
+{"id":"q09","question":"집주인이 보증금을 5% 넘게 올려달라고 합니다. 가능한가요?","expected_refs":["제7조"],"must_mention":["증액","5"]}
+{"id":"q10","question":"대항력은 언제 생기나요?","expected_refs":["제3조"],"must_mention":["인도","주민등록"]}
+{"id":"q11","question":"보증금을 돌려받기 전에 이사를 가도 대항력이 유지되나요?","expected_refs":["제3조의3"],"must_mention":["임차권등기"]}
+{"id":"q12","question":"임대차가 끝났는데 집주인이 보증금 반환을 미룹니다. 소송 말고 방법이 있나요?","expected_refs":["제3조의2","제3조의3"],"must_mention":["임차권등기"]}
+{"id":"q13","question":"보증금 반환과 집을 비워주는 것 중 무엇을 먼저 해야 하나요?","expected_refs":["제3조의2"],"must_mention":["동시이행"]}
+{"id":"q14","question":"확정일자와 전입신고는 어떻게 다른가요?","expected_refs":["제3조","제3조의2"],"must_mention":["대항","우선변제"]}
+{"id":"q15","question":"임차권등기명령을 신청하면 비용은 누가 부담하나요?","expected_refs":["제3조의3"],"must_mention":["임차권등기"]}
+{"id":"q16","question":"소액임차인 최우선변제 금액은 어떻게 정해지나요?","expected_refs":["제8조"],"must_mention":["최우선변제","일정액"]}
