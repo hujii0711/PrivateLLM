@@ -2,7 +2,7 @@
 
 평가셋: packages/eval/eval_set.jsonl (16문항, 학습 질문 풀과 disjoint)
 학습: data/ft(train 45 / valid 4)로 mlx_lm.lora, 300 iters, num-layers 8, lr 1e-5.
-측정: 양 arm 같은 세션·temp 0.2 동일. qlora arm은 생성만 어댑터, judge는 base(공정 비교).
+측정: 양 arm 같은 세션·동일 temp(run_chat 기본 0.3) — 평가 러너는 settings.temperature를 안 넘김(서빙 0.2와 다름; 양 arm 동일하므로 A/B 타당). qlora arm은 생성만 어댑터, judge는 base(공정 비교).
 
 ## 결과
 
