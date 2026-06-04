@@ -4,12 +4,20 @@ from typing import Iterator
 from rag.citations import extract_sources, strip_invalid_citations
 from rag.prompt import build_messages
 
+DISCLAIMER = "※ 본 답변은 일반적 정보 제공이며 법률 자문이 아닙니다."
+
 NO_GROUNDING_MSG = (
     "죄송합니다. 질문과 충분히 관련된 근거(법령·판례)를 찾지 못했습니다. "
     "주택임대차 보증금 반환과 관련된 구체적 상황(예: 계약 종료 여부, 보증금 액수, "
     "임차권등기 여부 등)으로 다시 질문해 주세요.\n\n"
-    "※ 본 답변은 일반적 정보 제공이며 법률 자문이 아닙니다."
+    + DISCLAIMER
 )
+
+
+def _ensure_disclaimer(answer: str) -> str:
+    if "법률 자문이 아닙니다" in answer:
+        return answer
+    return answer.rstrip() + "\n\n" + DISCLAIMER
 
 
 def run_chat(query: str, *, retriever, llm, max_tokens: int = 768,
@@ -30,7 +38,7 @@ def run_chat(query: str, *, retriever, llm, max_tokens: int = 768,
         yield {"type": "token", "text": tok}
 
     raw = "".join(parts)
-    answer = strip_invalid_citations(raw, hits)
+    answer = _ensure_disclaimer(strip_invalid_citations(raw, hits))
     sources = [
         {"n": s.n, "title": s.title, "ref": s.ref, "url": s.url,
          "source_type": s.source_type}

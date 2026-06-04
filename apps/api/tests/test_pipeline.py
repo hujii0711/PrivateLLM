@@ -41,6 +41,23 @@ def test_run_chat_strips_hallucinated_citation_from_final():
     assert [s["n"] for s in final["sources"]] == [1]
 
 
+def test_run_chat_appends_disclaimer_when_model_omits_it():
+    from api.pipeline import run_chat, DISCLAIMER
+    retr = StubRetriever([_hit(1)])
+    llm = FakeLLM(["보증금은 우선변제됩니다[1]."])   # 모델이 면책 고지를 빠뜨림
+    final = [e for e in run_chat("q", retriever=retr, llm=llm) if e["type"] == "done"][0]
+    assert final["answer"].endswith(DISCLAIMER)
+    assert final["answer"].count("법률 자문이 아닙니다") == 1
+
+
+def test_run_chat_does_not_double_append_disclaimer():
+    from api.pipeline import run_chat
+    retr = StubRetriever([_hit(1)])
+    llm = FakeLLM(["답변[1].\n\n※ 본 답변은 일반적 정보 제공이며 법률 자문이 아닙니다."])
+    final = [e for e in run_chat("q", retriever=retr, llm=llm) if e["type"] == "done"][0]
+    assert final["answer"].count("법률 자문이 아닙니다") == 1   # 중복 없음
+
+
 def test_run_chat_no_grounding_returns_fallback_without_calling_llm():
     called = {"n": 0}
     class LoudLLM:
