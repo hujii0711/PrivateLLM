@@ -42,7 +42,7 @@ def main() -> None:
 
 
 def _first_tag(xml_text: str, tag: str) -> str | None:
-    from lxml import etree
+    import lxml.etree as etree
 
     root = etree.fromstring(xml_text.encode("utf-8"))
     el = root.find(f".//{tag}")
@@ -50,7 +50,7 @@ def _first_tag(xml_text: str, tag: str) -> str | None:
 
 
 def _all_tags(xml_text: str, tag: str) -> list[str]:
-    from lxml import etree
+    import lxml.etree as etree
 
     root = etree.fromstring(xml_text.encode("utf-8"))
     return [el.text.strip() for el in root.iter(tag) if el.text and el.text.strip()]

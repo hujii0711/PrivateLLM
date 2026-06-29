@@ -1,0 +1,41 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/packages/rag/src",
+    "${workspaceFolder}/packages/eval/src",
+    "${workspaceFolder}/packages/finetune/src",
+    "${workspaceFolder}/packages/ftdata/src",
+    "${workspaceFolder}/apps/api/src",
+    "${workspaceFolder}/pipelines/src"
+  ],
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports.ruff": "explicit",
+      "source.fixAll.ruff": "explicit"
+    }
+  },
+  "eslint.workingDirectories": [
+    { "directory": "apps/web", "changeProcessCWD": true }
+  ],
+  "[javascript][typescript][typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+  "search.exclude": {
+    "**/.venv": true,
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/data": true,
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/uv.lock": true
+  },
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.debugpy",
+    "charliermarsh.ruff",
+    "dbaeumer.vscode-eslint",
+    "bradlc.vscode-tailwindcss",
+    "vitest.explorer",
+    "tamasfe.even-better-toml",
+    "qwtel.sqlite-viewer",
+    "DavidAnson.vscode-markdownlint",
+    "eamodio.gitlens"
+  ]
+}

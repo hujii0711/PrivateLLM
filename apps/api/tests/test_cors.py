@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
-from api.main import create_app
 from api.llm import FakeLLM
+from api.main import create_app
 
 
 class StubRetriever:

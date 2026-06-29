@@ -1,4 +1,4 @@
-from pipelines.schema import Chunk, SOURCE_TYPES, make_chunk
+from pipelines.schema import SOURCE_TYPES, Chunk, make_chunk
 
 
 def test_make_chunk_fills_all_fields():

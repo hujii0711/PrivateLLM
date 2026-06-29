@@ -4,7 +4,10 @@ from pipelines.ingest.law_client import LawClient
 
 
 class FakeResponse:
-    def __init__(self, text): self.text = text; self.status_code = 200
+    def __init__(self, text):
+        self.text = text
+        self.status_code = 200
+
     def raise_for_status(self): pass
 
 

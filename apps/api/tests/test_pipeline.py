@@ -42,7 +42,7 @@ def test_run_chat_strips_hallucinated_citation_from_final():
 
 
 def test_run_chat_appends_disclaimer_when_model_omits_it():
-    from api.pipeline import run_chat, DISCLAIMER
+    from api.pipeline import DISCLAIMER, run_chat
     retr = StubRetriever([_hit(1)])
     llm = FakeLLM(["보증금은 우선변제됩니다[1]."])   # 모델이 면책 고지를 빠뜨림
     final = [e for e in run_chat("q", retriever=retr, llm=llm) if e["type"] == "done"][0]

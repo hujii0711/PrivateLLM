@@ -1,47 +1,47 @@
 ---
 name: export-last-response
-description: Use when the user asks to save or export the most recent assistant reply to a markdown file (e.g. "방금 응답 내보내줘", "지금 답변 md로 저장", "export the last response"). Triggers on requests to dump/archive the immediately preceding answer to docs/export.
+description: 사용자가 가장 최근 어시스턴트 응답을 마크다운 파일로 저장/내보내기 요청할 때 사용 (예: "방금 응답 내보내줘", "지금 답변 md로 저장", "직전 답변 내보내기", "export the last response"). 직전 응답을 docs/export 에 저장/보관하라는 요청에 반응.
 ---
 
-# Export Last Response
+# 직전 응답 내보내기 (Export Last Response)
 
-## Overview
-Save the **single most recent assistant response** in this conversation to a markdown file at `docs/export/yyyy-MM-dd-{요약}.md`. Verbatim content only — no added title, frontmatter, or commentary.
+## 개요
+이 대화에서 **가장 최근 어시스턴트 응답 한 개**를 `docs/export/yyyy-MM-dd-HHmm{요약}.md` 마크다운 파일로 저장합니다. 내용은 **그대로(verbatim)**만 담고, 제목·frontmatter·부가 설명은 넣지 않습니다.
 
-## Steps
+## 단계
 
-1. **Target.** The last assistant message containing **text shown to the user**, immediately before this skill was invoked. Ignore tool-call-only turns; not earlier messages, not a summary of several. If there is no prior assistant response, tell the user and stop.
+1. **대상 선택.** 이 스킬이 호출되기 직전, **사용자에게 표시된 텍스트**를 담은 마지막 어시스턴트 메시지입니다. 도구 호출만 있는 턴은 무시하고, 더 이전 메시지나 여러 응답의 요약본도 아닙니다. 이전 응답이 없으면 사용자에게 알리고 중단합니다.
 
-2. **Date.** Today's date as `yyyy-MM-dd`. Use the current date the environment provides (e.g. a `currentDate` / today's-date note); if sources disagree, prefer that injected value.
+2. **날짜.** 오늘 날짜를 `yyyy-MM-dd-HHmm` 형식으로 씁니다. 환경이 제공하는 현재 날짜(예: `currentDate` / 오늘 날짜 안내)를 사용하고, 출처가 서로 다르면 주입된 값을 우선합니다.
 
-3. **요약 (filename slug).** Write a concise Korean noun-phrase capturing the response's main topic.
-   - 2–6 words, roughly ≤ 30 characters.
-   - Replace each run of whitespace with a single hyphen `-`.
-   - Remove filesystem-unsafe characters: `/ \ : * ? " < > |` and any leading/trailing punctuation/hyphens.
-   - Keep Korean characters as-is (do NOT romanize).
+3. **요약 (파일명 슬러그).** 응답의 핵심 주제를 담은 간결한 한국어 명사구를 작성합니다.
+   - 2~6 단어, 약 30자 이내.
+   - 연속된 공백은 하이픈 `-` 하나로 바꿉니다.
+   - 파일명에 쓸 수 없는 문자 제거: `/ \ : * ? " < > |` 및 앞뒤의 구두점/하이픈.
+   - 한글은 그대로 유지(로마자로 바꾸지 않음).
 
-4. **Output dir.** `docs/export/` at the **project root**. Create it if missing (`mkdir -p docs/export`).
+4. **출력 디렉터리.** **프로젝트 루트**의 `docs/export/`. 없으면 생성합니다(`mkdir -p docs/export`).
 
-5. **Filename.** `{date}-{요약}.md`. If that file already exists, append `-2`, `-3`, … (`2026-06-05-보증금-반환-설명-2.md`). Never overwrite.
+5. **파일명.** `{날짜}-{요약}.md`. 같은 파일이 이미 있으면 `-2`, `-3` …을 덧붙입니다(`2026-06-05-보증금-반환-설명-2.md`). 절대 덮어쓰지 않습니다.
 
-6. **Content.** Write the target response's markdown **verbatim** — exactly as it appeared, preserving `①②③`, lists, code blocks, tables. End with a single trailing newline. Do **not** add an H1 title, YAML frontmatter, export note, or any text the user didn't see.
+6. **내용.** 대상 응답의 마크다운을 **그대로** 씁니다 — 보였던 모습 그대로 `①②③`, 목록, 코드 블록, 표를 보존합니다. 마지막에 줄바꿈 하나로 끝냅니다. H1 제목, YAML frontmatter, 내보내기 메모 등 **사용자가 보지 않은 텍스트는 추가하지 않습니다.**
 
-7. **Confirm.** Report the created path to the user (one line).
+7. **확인.** 생성된 경로를 사용자에게 한 줄로 알립니다.
 
-## Quick Reference
+## 빠른 참조
 
-| Item | Rule |
+| 항목 | 규칙 |
 |---|---|
-| Source | Immediately-preceding assistant response only |
-| Path | `docs/export/{yyyy-MM-dd}-{요약}.md` (project root) |
-| 요약 | Korean, ≤~30 chars, spaces→`-`, unsafe chars stripped |
-| Collision | Append `-2`, `-3`… never overwrite |
-| Content | Verbatim response, nothing added |
+| 대상 | 직전 어시스턴트 응답 하나만 |
+| 경로 | `docs/export/{yyyy-MM-dd-HHmm}-{요약}.md` (프로젝트 루트) |
+| 요약 | 한국어, 약 30자 이내, 공백→`-`, 금지 문자 제거 |
+| 충돌 | `-2`, `-3` … 덧붙이고 덮어쓰지 않음 |
+| 내용 | 응답 그대로, 추가 없음 |
 
-## Common Mistakes
+## 흔한 실수
 
-- **Adding a heading/frontmatter** — user asked for the response *only*. Write it raw.
-- **Romanizing the summary** — keep it Korean (filesystem supports it).
-- **Exporting the wrong message** — it's the last response, not the whole conversation or an earlier answer.
-- **Overwriting an existing file** — suffix instead.
-- **Forgetting to create `docs/export/`** — `mkdir -p` first.
+- **제목/frontmatter 추가** — 사용자는 응답 *그 자체*만 원했습니다. 원문 그대로 쓰세요.
+- **요약을 로마자로 변환** — 한국어로 유지하세요(파일 시스템이 지원함).
+- **잘못된 메시지 내보내기** — 전체 대화나 이전 답변이 아니라 마지막 응답입니다.
+- **기존 파일 덮어쓰기** — 대신 접미사를 붙이세요.
+- **`docs/export/` 생성 누락** — 먼저 `mkdir -p` 하세요.

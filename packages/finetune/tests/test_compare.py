@@ -1,6 +1,6 @@
 import json
 
-from finetune.compare import load_summary, compare_runs, to_markdown
+from finetune.compare import compare_runs, load_summary, to_markdown
 
 
 def test_load_summary_reads_summary_block(tmp_path):

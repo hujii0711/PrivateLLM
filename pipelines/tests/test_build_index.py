@@ -1,6 +1,6 @@
 import json
 
-from pipelines.index.build_index import build_index, COLLECTION
+from pipelines.index.build_index import COLLECTION, build_index
 
 
 def _write_chunks(path, chunks):
@@ -43,7 +43,8 @@ def test_build_index_is_idempotent(tmp_path):
         {"id": "law-1", "text": "a", "source_type": "법령",
          "title": "t", "ref": "r", "url": "u", "date": "2023-01-01"},
     ])
-    fn = lambda texts: [[1.0, 0.0] for _ in texts]
+    def fn(texts):
+        return [[1.0, 0.0] for _ in texts]
     build_index(chunks_path=chunks_path, chroma_dir=tmp_path / "chroma", encode_fn=fn)
     build_index(chunks_path=chunks_path, chroma_dir=tmp_path / "chroma", encode_fn=fn)
 

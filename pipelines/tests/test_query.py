@@ -1,5 +1,5 @@
-from pipelines.index.build_index import build_index
 from pipelines.cli.query import search
+from pipelines.index.build_index import build_index
 
 
 def test_search_returns_topk_with_metadata(tmp_path):
@@ -7,7 +7,8 @@ def test_search_returns_topk_with_metadata(tmp_path):
     chunks_path = tmp_path / "chunks.jsonl"
     rows = [
         {"id": "a", "text": "보증금 반환 청구", "source_type": "법령",
-         "title": "주택임대차보호법 제3조의2", "ref": "제3조의2", "url": "u1", "date": "2023-07-19"},
+         "title": "주택임대차보호법 제3조의2",
+         "ref": "제3조의2", "url": "u1", "date": "2023-07-19"},
         {"id": "b", "text": "임대차 기간", "source_type": "법령",
          "title": "주택임대차보호법 제4조", "ref": "제4조", "url": "u2", "date": "2023-07-19"},
     ]
