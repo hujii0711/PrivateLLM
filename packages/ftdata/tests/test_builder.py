@@ -1,6 +1,6 @@
 import json
 
-from ftdata.builder import to_chat_example, split_train_valid, write_jsonl
+from ftdata.builder import split_train_valid, to_chat_example, write_jsonl
 from rag.types import Retrieved
 
 
@@ -10,7 +10,11 @@ def _hit(ref):
 
 
 def test_to_chat_example_has_system_user_assistant():
-    ex = to_chat_example("보증금?", [_hit("제3조의2")], "① ② ③ 우선변제[1]. ※ ... 법률 자문이 아닙니다.")
+    ex = to_chat_example(
+        "보증금?",
+        [_hit("제3조의2")],
+        "① ② ③ 우선변제[1]. ※ ... 법률 자문이 아닙니다."
+    )
     roles = [m["role"] for m in ex["messages"]]
     assert roles == ["system", "user", "assistant"]
     assert "근거" in ex["messages"][1]["content"]          # user에 근거 블록
@@ -31,5 +35,5 @@ def test_write_jsonl_roundtrip(tmp_path):
             {"messages": [{"role": "user", "content": "b"}]}]
     p = tmp_path / "train.jsonl"
     write_jsonl(p, rows)
-    back = [json.loads(l) for l in p.read_text(encoding="utf-8").splitlines()]
+    back = [json.loads(line) for line in p.read_text(encoding="utf-8").splitlines()]
     assert back == rows

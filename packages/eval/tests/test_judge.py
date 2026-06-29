@@ -1,4 +1,4 @@
-from eval.judge import groundedness_score, JUDGE_PROMPT_HINT
+from eval.judge import JUDGE_PROMPT_HINT, groundedness_score
 
 
 def test_uses_injected_judge_and_parses_score():

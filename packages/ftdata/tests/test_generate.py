@@ -1,4 +1,4 @@
-from ftdata.generate import generate_candidates, Candidate
+from ftdata.generate import Candidate, generate_candidates
 from rag.types import Retrieved
 
 

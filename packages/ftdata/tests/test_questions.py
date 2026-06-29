@@ -8,8 +8,8 @@ EVAL_SET = (Path(__file__).resolve().parents[3]
 
 def _eval_questions():
     import json
-    return {json.loads(l)["question"]
-            for l in EVAL_SET.read_text(encoding="utf-8").splitlines() if l.strip()}
+    return {json.loads(line)["question"]
+            for line in EVAL_SET.read_text(encoding="utf-8").splitlines() if line.strip()}
 
 
 def test_pool_loads_nonempty():

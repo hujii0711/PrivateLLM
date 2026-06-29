@@ -1,4 +1,4 @@
-from eval.retrieval_metrics import ref_hit, recall_at_k
+from eval.retrieval_metrics import recall_at_k, ref_hit
 
 
 def test_ref_hit_true_when_expected_ref_retrieved():

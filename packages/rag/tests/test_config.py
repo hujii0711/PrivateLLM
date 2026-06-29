@@ -1,6 +1,5 @@
-from pathlib import Path
 
-from rag.config import RagConfig, COLLECTION, MODEL_NAME
+from rag.config import COLLECTION, MODEL_NAME, RagConfig
 
 
 def test_constants_match_pipeline_contract():

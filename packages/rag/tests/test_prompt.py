@@ -1,4 +1,4 @@
-from rag.prompt import build_messages, SYSTEM_PROMPT
+from rag.prompt import SYSTEM_PROMPT, build_messages
 from rag.types import Retrieved
 
 

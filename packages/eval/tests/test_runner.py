@@ -1,5 +1,5 @@
 from eval.dataset import EvalItem
-from eval.runner import run_item, ItemResult
+from eval.runner import ItemResult, run_item
 from rag.types import Retrieved
 
 
@@ -24,7 +24,10 @@ def test_run_item_computes_retrieval_and_answer_metrics():
     item = EvalItem(id="q1", question="보증금?", expected_refs=["제3조의2"],
                     must_mention=["우선변제"])
     retr = StubRetriever(["제3조의2", "제4조"])
-    llm = FakeLLM("① ② ③ 우선변제 받습니다[1]. ※ 본 답변은 일반적 정보 제공이며 법률 자문이 아닙니다.")
+    llm = FakeLLM(
+        "① ② ③ 우선변제 받습니다[1]. "
+        "※ 본 답변은 일반적 정보 제공이며 법률 자문이 아닙니다."
+    )
     res = run_item(item, retriever=retr, llm=llm, judge_fn=lambda p: "0.9", top_k=6)
 
     assert isinstance(res, ItemResult)
