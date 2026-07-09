@@ -3,7 +3,8 @@
 실제 응답 구조(Task 4 fixture로 확인): 법령 > 기본정보 > 법령명_한글,
 법령 > 조문 > 조문단위 > (조문번호, 조문제목, 조문내용, ...).
 """
-from lxml import etree
+
+import lxml.etree as etree
 
 _NAME = "법령명_한글"
 _UNIT = "조문단위"
@@ -22,6 +23,13 @@ _HO_TEXT = "호내용"  # 호번호 마커(1.)를 이미 포함한 호 본문
 
 
 def parse_law(xml_text: str) -> dict:
+    """법령 본문 XML을 파이프라인용 법령 dict로 변환한다.
+
+    국가법령정보센터 응답에서 법령명과 실제 조문 단위만 추출한다. 편/장/절
+    같은 구조 헤더는 검색 대상 본문이 아니므로 제외하고, 각 조문은 이후
+    `chunk_law`가 바로 사용할 수 있는 `article_no`, `title`, `text` 형태로 맞춘다.
+    """
+
     root = etree.fromstring(xml_text.encode("utf-8"))
 
     name_el = root.find(f".//{_NAME}")
@@ -36,11 +44,13 @@ def parse_law(xml_text: str) -> dict:
             continue
         branch = _text(unit.find(_BRANCH_NO))
         title = _text(unit.find(_TITLE))
-        articles.append({
-            "article_no": _normalize_no(no, branch),
-            "title": title,
-            "text": _article_text(unit),
-        })
+        articles.append(
+            {
+                "article_no": _normalize_no(no, branch),
+                "title": title,
+                "text": _article_text(unit),
+            }
+        )
     return {"law_name": law_name, "articles": articles}
 
 
@@ -70,10 +80,23 @@ def _article_text(unit) -> str:
 
 
 def _text(el) -> str:
+    """XML 요소의 직접 텍스트를 안전하게 꺼내고 앞뒤 공백을 제거한다."""
+    # 조건 표현식(삼항 연산자)
+    # [참일_때_값]  if  [조건]  else  [거짓일_때_값]
+
+    # (el.text or "").strip() 이 조건이 참이면
+    # el is not None: el이 아예 없는 값(None)이 아닌지 확인
+    # el.text: el 안에 텍스트가 있는지 확인 (비어있으면 False)
     return (el.text or "").strip() if el is not None and el.text else ""
 
 
 def _normalize_no(no: str, branch: str = "") -> str:
+    """API의 조문번호와 가지번호를 사람이 읽는 조문 표기로 합친다.
+
+    예를 들어 조문번호 `3`, 가지번호 `2`는 `제3조의2`로 정규화한다.
+    가지번호가 없거나 0이면 일반 조문 번호만 반환한다.
+    """
+
     no = no.strip()
     base = no if no.startswith("제") else f"제{no}조"
     b = branch.strip()

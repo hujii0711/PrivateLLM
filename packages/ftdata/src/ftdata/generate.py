@@ -1,6 +1,6 @@
 """질문 → 검색 근거 + run_chat로 K개 후보 답변 생성(temp 다양성) + 근거 점수."""
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable
 
 from api.pipeline import run_chat
 from eval.judge import groundedness_score

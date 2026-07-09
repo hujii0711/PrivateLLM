@@ -34,8 +34,9 @@ def main() -> None:
     settings = Settings.from_env()
     retriever = Retriever(settings.rag)
     llm = MlxLLM(settings.mlx_model)
-    judge_fn = lambda prompt: "".join(llm.stream(
-        [{"role": "user", "content": prompt}], max_tokens=16, temperature=0.0))
+    def judge_fn(prompt):
+        return "".join(llm.stream(
+            [{"role": "user", "content": prompt}], max_tokens=16, temperature=0.0))
 
     questions = load_questions()
     examples: list[dict] = []
