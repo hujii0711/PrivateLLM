@@ -1,0 +1,20 @@
+[tool.ruff]
+# 한 줄의 최대 길이 (기본값 88)
+line-length = 100
+
+# 대상 파이썬 버전
+target-version = "py310"
+
+[tool.ruff.lint]
+# 적용할 규칙 세트 선택 (E: 에러, F: Pyflakes, I: Isort 등)
+select = ["E", "F", "I", "W"]
+# 무시할 특정 규칙 코드 (예: E501 - 라인 길이 초과)
+ignore = ["E501"]
+
+[tool.ruff.format]
+# 따옴표 스타일 (single, double)
+quote-style = "double"
+# 들여쓰기 방식 (space, tab)
+indent-style = "space"
+# 행 끝 콤마 사용 여부
+skip-magic-trailing-comma = false
