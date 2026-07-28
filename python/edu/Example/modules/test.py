@@ -23,9 +23,10 @@ from mod import *
 # 모듈명 없이 함수명만으로 바로 호출 가능
 # 필요한 것만 가져오므로 메모리 효율적 ✅
 # 호츨 방법: add()
-from mod import add
+from .mod import add, sub  # from mod import add, sub
 
 print(mod.add(1, 2))
 print(add(1, 2))
 print(md.add(1, 2))
 print(add(1, 2))
+print(sub(5, 3))

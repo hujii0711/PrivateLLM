@@ -62,6 +62,8 @@ def collect(*, client, out_dir: Path, law_queries=None, prec_queries=None) -> No
         _write(out_dir / "law" / f"{_slug(law['law_name'])}.json", law)
 
     seen: set[str] = set()
+    #  ↑      ↑        ↑
+    # 변수명  타입힌트  실제 값(초기화)
     for q in prec_queries or PREC_QUERIES:
         search_xml = client.search(target="prec", query=q, display=20)
         for pid in _all(search_xml, "판례일련번호"):
@@ -77,6 +79,7 @@ def collect(*, client, out_dir: Path, law_queries=None, prec_queries=None) -> No
             prec["prec_id"] = pid
             prec["source_url"] = _PREC_URL.format(id=pid)
             _write(out_dir / "prec" / f"{pid}.json", prec)
+
 
 # _ 접두사내부용 함수 표시 (외부에서 직접 호출 비권장)
 # search_xml: strXML 문자열 입력

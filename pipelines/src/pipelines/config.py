@@ -1,6 +1,8 @@
 import os
+
 # dataclass — 클래스를 데이터 컨테이너로 간편하게 정의하는 데코레이터
 from dataclasses import dataclass
+
 # Path — 문자열 대신 객체로 파일 경로를 다루는 클래스
 from pathlib import Path
 
@@ -9,6 +11,7 @@ from pathlib import Path
 # .parents[3] — 3단계 상위 폴더 (예: a/b/c/d/config.py → a/)
 REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_DATA_ROOT = REPO_ROOT / "data"
+
 
 # @dataclass는 __init__, __repr__ 등을 자동 생성해 줍니다. 즉, 아래가 자동으로 만들어집니다
 # ========================
@@ -22,9 +25,10 @@ class Config:
 
     data_root: Path
     oc: str
-# @property는 메서드를 속성처럼 접근하게 해 줍니다.
-# pythonconfig.raw_dir()  # ❌ 괄호 필요 없음
-# config.raw_dir    # ✅ 이렇게 접근
+
+    # @property는 메서드를 속성처럼 접근하게 해 줍니다.
+    # pythonconfig.raw_dir()  # ❌ 괄호 필요 없음
+    # config.raw_dir    # ✅ 이렇게 접근
     @property
     def raw_dir(self) -> Path:
         """수집 단계가 원천 JSON을 저장하고 이후 단계가 읽는 디렉터리."""
@@ -42,10 +46,12 @@ class Config:
 
     def ensure_dirs(self) -> None:
         """파이프라인 산출물 디렉터리를 미리 생성한다."""
+        # 세 개를 튜플로 묶어서 순회한다.
         for d in (self.raw_dir, self.chunks_dir, self.chroma_dir):
             # parents=True — 중간 폴더가 없어도 자동 생성
             # exist_ok=True — 이미 폴더가 있어도 오류 없이 통과
             d.mkdir(parents=True, exist_ok=True)
+
     # @classmethod는 self 대신 cls(클래스 자체)를 받습니다
     # 팩토리 메서드 패턴 — 환경변수에서 값을 읽어 Config 인스턴스를 생성하는 대안 생성자
     # os.environ.get("DATA_ROOT", str(DEFAULT_DATA_ROOT)) — 환경변수가 없으면 기본값 사용

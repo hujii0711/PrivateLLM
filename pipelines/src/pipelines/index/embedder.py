@@ -14,6 +14,7 @@ class Embedder:
     기본 실행에서는 bge-m3 SentenceTransformer 모델을 지연 로딩하고, 테스트에서는
     `encode_fn`을 주입해 무거운 모델 다운로드나 추론 없이 같은 인터페이스를 검증한다.
     """
+
     # Callable이 없다면?
     # def run(func):         # func가 뭔지 전혀 알 수 없음 😕
     # Callable이 있다면?
@@ -22,8 +23,7 @@ class Embedder:
     # Callable[[입력타입],  반환타입]
     # [list[str]]   list --> str 리스트를 받아서 → 리스트를 반환하는 함수 타입
     # | 는 유니온 타입 (Python 3.10+) Callable 또는 None 둘 다 허용
-    def __init__(self, encode_fn: Callable[[list[str]], list] | None = None,
-                 model_name: str = MODEL_NAME):
+    def __init__(self, encode_fn: Callable[[list[str]], list] | None = None, model_name: str = MODEL_NAME):
         """임베딩 함수 또는 모델명을 설정한다."""
 
         self._encode_fn = encode_fn
@@ -39,6 +39,9 @@ class Embedder:
 
         if self._model is None:
             import torch
+
+            # SentenceTransformer는 앞서 말한 PyTorch를 기반으로 만들어진 특적 목적용 텍스트 AI 라이브러리입니다.
+            # 핵심 역할은 "문장이나 단어를 컴퓨터가 이해할 수 있는 고차원 숫자 벡터(Embedding)로 변환하는 것"입니다.
             from sentence_transformers import SentenceTransformer
 
             device = "mps" if torch.backends.mps.is_available() else "cpu"

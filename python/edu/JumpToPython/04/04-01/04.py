@@ -5,6 +5,8 @@ print(result)
 
 
 def add2(a, b):
-    return a + b;
+    return a + b
+
+
 result2 = add2(3, 4)
 print(result2)
