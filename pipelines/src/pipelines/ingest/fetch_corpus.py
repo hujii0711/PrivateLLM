@@ -110,7 +110,7 @@ def _match_law_mst(search_xml: str, query: str) -> str | None:
     #    search_xml.encode("utf-8")
     # 2. 바이트 → XML 트리(루트 노드)로 변환
     #    etree.fromstring()
-    root = etree.fromstring(search_xml.encode("utf-8"))
+    root = etree.fromstring(search_xml.encode("utf-8"))  # 바이트로 변환된 XML을 파싱해서 Element 트리의 루트 노드를 반환합니다.
     # first_mst — 정확히 일치하는 결과가 없을 때 첫 번째 결과로 폴백하기 위한 변수
     first_mst = None
     # 실수로 공백이 포함된 검색어 방어
@@ -174,8 +174,14 @@ def _slug(s: str) -> str:
 
 def main() -> None:
     """환경 설정을 읽고 기본 검색어 세트로 원천 데이터를 수집한다."""
-
+    # cfg에서 추가로 쓸 수 있는 것들 (property)
+    # Config는 oc, data_root 외에도 @property로 정의된 파생 경로들을 제공합니다:
     cfg = Config.from_env()
+    # cfg.oc          # "fujii0711" (환경변수에서 읽음)
+    # cfg.data_root   # Path 객체 (환경변수 or 기본값)
+    # cfg.raw_dir     # cfg.data_root / "raw"
+    # cfg.chunks_dir  # cfg.data_root / "chunks"
+    # cfg.chroma_dir  # cfg.data_root / "chroma"
     cfg.ensure_dirs()
     collect(client=LawClient(oc=cfg.oc), out_dir=cfg.raw_dir)
     print(f"수집 완료 → {cfg.raw_dir}")
