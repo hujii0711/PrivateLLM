@@ -118,6 +118,8 @@ def _match_law_mst(search_xml: str, query: str) -> str | None:
     # 결과 행 단위로 (법령명한글, 법령일련번호) 쌍을 본다. law 검색 결과 루트
     # 바로 아래에 행 요소들이 있고, 각 행에 두 태그가 함께 들어 있다.
     # root.iter() — XML 트리의 모든 노드를 순서대로 순회
+    # root.iter()는 XML 트리의 모든 하위 요소(Element)를 순회하는 이터레이터입니다.
+    # root.iter()는 root 자기 자신부터 시작해서, 트리 구조 전체를 깊이 우선(depth-first) 순서로 하나씩 방문합니다. 즉 자식뿐 아니라 손자, 증손자까지 모든 하위 태그를 빠짐없이 훑습니다.
     # 각 row는 XML의 한 요소(태그)
     for row in root.iter():
         # .find("태그명") — 자식 요소 중 해당 태그를 찾아 반환, 없으면 None 반환
@@ -128,6 +130,12 @@ def _match_law_mst(search_xml: str, query: str) -> str | None:
         # 조건 2: 태그는 있지만 텍스트가 없거나 공백뿐
         # not (mst_el.text and mst_el.text.strip())
         # 둘중 하나라도 해당하면 continue 수행함
+
+        # 왜 == 대신 is를 쓰나?
+        # mst_el is None    # ✅ 올바른 방식
+        # mst_el == None    # ⚠️ 동작은 하지만 관례상 지양
+        # None은 파이썬에서 유일한 싱글턴 객체라서, 값 비교(==)가 아니라 정체성 비교(is) 를 쓰는 것이 파이썬 표준 관례(PEP 8)입니다. is가 더 빠르고 명확합니다.
+
         if mst_el is None or not (mst_el.text and mst_el.text.strip()):
             continue
         # 루프에서 처음 만난 유효한 일련번호만 저장
@@ -169,7 +177,7 @@ def _all(xml_text: str, tag: str) -> list[str]:
 def _slug(s: str) -> str:
     """파일명에 쓰기 좋도록 문자열 앞뒤 공백과 내부 공백을 정리한다."""
 
-    return re.sub(r"\s+", "_", s.strip())
+    return re.sub(r"\s+", "_", s.strip())  # re.sub(찾을패턴, 바꿀문자, 대상문자열)
 
 
 def main() -> None:
