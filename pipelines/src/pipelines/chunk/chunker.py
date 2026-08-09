@@ -16,7 +16,7 @@ def chunk_law(law: dict, *, date: str) -> list[Chunk]:
     """
 
     name = law["law_name"]
-    url = law.get("source_url", "") # 키값 없으면 기본값 공백
+    url = law.get("source_url", "")  # 키값 없으면 기본값 공백
     # 타입 힌팅(Type Hinting, 타입 어노테이션) 문법
     # chunks: 내가 지금 만들 변수의 이름이야.
     # : list[Chunk]: 이 변수에는 Chunk라는 클래스(객체)들만 요소로 들어가는 리스트(list)가 담길 예정이야. (타입 힌트)
@@ -86,10 +86,12 @@ def _fmt_date(yyyymmdd: str) -> str:
         return f"{s[:4]}-{s[4:6]}-{s[6:]}"
     return s
 
+
 # raw_dir: Path타입 힌트 — Path 객체를 받겠다는 명시
 # * 이 뒤의 인자는 반드시 키워드로만 호출 가능
 def build_all(raw_dir: Path, out_path: Path, *, law_date: str = "") -> int:
-    """raw_dir의 모든 JSON을 읽어 하나의 청크 jsonl 파일로 만든다.
+    """이 코드는 법령(law)과 판례(prec) JSON 파일들을 읽어서 청크(chunk) 단위로 쪼갠 후, 하나의 JSONL 파일로 저장하는 역할을 합니다.
+    raw_dir의 모든 JSON을 읽어 하나의 청크 jsonl 파일로 만든다.
 
     `raw/law/*.json`은 `chunk_law`, `raw/prec/*.json`은 `chunk_prec`로 변환한다.
     반환값은 실제로 파일에 쓴 청크 수라서 CLI 출력과 테스트 검증에 쓸 수 있다.
@@ -102,6 +104,7 @@ def build_all(raw_dir: Path, out_path: Path, *, law_date: str = "") -> int:
     # out_path.parent = "data/chunks/" 폴더를 생성
     out_path.parent.mkdir(parents=True, exist_ok=True)
     n = 0
+    # out_path라는 경로에 파일을 쓰기(write) 모드로 엽니다.
     # "w" — 쓰기 모드 (파일이 없으면 생성, 있으면 덮어쓰기)
     # encoding="utf-8" — 한글 깨짐 방지
     # with 블록이 끝나면 자동으로 파일을 닫아줌 (f.close() 불필요)
@@ -109,6 +112,7 @@ def build_all(raw_dir: Path, out_path: Path, *, law_date: str = "") -> int:
         # 법령 JSON은 조문별로, 판례 JSON은 요약 섹션별로 순서대로 합쳐 하나의 jsonl로 만든다.
         # .glob("*.json")해당 폴더의 모든 .json 파일 찾기
         # sorted(...)파일명 알파벳 순으로 정렬
+        # raw_dir / "law" 폴더 안에 있는 모든 .json 파일을 정렬된 순서로 순회합니다.
         for p in sorted((raw_dir / "law").glob("*.json")):
             # p.read_text() — 파일 전체를 문자열로 읽기
             # json.loads() — JSON 문자열 → 파이썬 딕셔너리로 변환
