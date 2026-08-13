@@ -1,0 +1,47 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/packages/rag/src",
+    "${workspaceFolder}/packages/eval/src",
+    "${workspaceFolder}/packages/finetune/src",
+    "${workspaceFolder}/packages/ftdata/src",
+    "${workspaceFolder}/apps/api/src",
+    "${workspaceFolder}/pipelines/src"
+  ],
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports.ruff": "explicit",
+      "source.fixAll.ruff": "explicit"
+    }
+  },
+  "eslint.workingDirectories": [
+    { "directory": "apps/web", "changeProcessCWD": true }
+  ],
+  "[javascript][typescript][typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+  // Mermaid 프리뷰 테마. 기본값 "vscode"는 VS Code 색상 변수에서 색을 파생시키는데,
+  // Monokai처럼 charts.*·editorWidget.border를 정의하지 않는 테마에서는 노드 배경이
+  // editorWidget.background(#1e1f1c)로 거의 검정이 되어 다이어그램이 보이지 않는다.
+  // mermaid 고정 팔레트를 써서 테마와 무관하게 렌더링한다.
+  "markdown-mermaid.darkModeTheme": "dark",
+  "markdown-mermaid.lightModeTheme": "default",
+  "search.exclude": {
+    "**/.venv": true,
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/data": true,
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/uv.lock": true
+  },
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true
+  }
+}

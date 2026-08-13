@@ -1,0 +1,169 @@
+Searching law for '주택임대차보호법'...
+params: {'OC': 'fujii0711', 'target': 'law', 'type': 'XML', 'query': '주택임대차보호법', 'display': 20}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawSearch.do?OC=fujii0711&target=law&type=XML&query=%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95&display=20
+
+Fetching law with ID '276291'...
+params: {'OC': 'fujii0711', 'target': 'law', 'type': 'XML', 'MST': '276291'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=law&type=XML&MST=276291
+
+Searching law for '민법'...
+params: {'OC': 'fujii0711', 'target': 'law', 'type': 'XML', 'query': '민법', 'display': 20}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawSearch.do?OC=fujii0711&target=law&type=XML&query=%EB%AF%BC%EB%B2%95&display=20
+
+Fetching law with ID '284415'...
+params: {'OC': 'fujii0711', 'target': 'law', 'type': 'XML', 'MST': '284415'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=law&type=XML&MST=284415
+
+Searching prec for '임대차 보증금 반환'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'query': '임대차 보증금 반환', 'display': 20}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawSearch.do?OC=fujii0711&target=prec&type=XML&query=%EC%9E%84%EB%8C%80%EC%B0%A8+%EB%B3%B4%EC%A6%9D%EA%B8%88+%EB%B0%98%ED%99%98&display=20
+
+Fetching prec with ID '618893'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '618893'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=618893
+
+Fetching prec with ID '612881'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '612881'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=612881
+
+Fetching prec with ID '607789'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '607789'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=607789
+
+Fetching prec with ID '606789'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '606789'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=606789
+
+Fetching prec with ID '605771'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '605771'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=605771
+
+Fetching prec with ID '606045'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '606045'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=606045
+
+Fetching prec with ID '241585'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '241585'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=241585
+
+Fetching prec with ID '241383'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '241383'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=241383
+
+Fetching prec with ID '241081'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '241081'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=241081
+
+Fetching prec with ID '239217'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '239217'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=239217
+
+Fetching prec with ID '606119'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '606119'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=606119
+
+Fetching prec with ID '238047'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '238047'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=238047
+
+Fetching prec with ID '238665'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '238665'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=238665
+
+Fetching prec with ID '238841'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '238841'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=238841
+
+Fetching prec with ID '238469'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '238469'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=238469
+
+Fetching prec with ID '348374'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '348374'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=348374
+
+Fetching prec with ID '233877'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '233877'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=233877
+
+Fetching prec with ID '238851'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '238851'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=238851
+
+Fetching prec with ID '219919'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '219919'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=219919
+
+Fetching prec with ID '227015'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '227015'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=227015
+
+Searching prec for '임차보증금 반환'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'query': '임차보증금 반환', 'display': 20}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawSearch.do?OC=fujii0711&target=prec&type=XML&query=%EC%9E%84%EC%B0%A8%EB%B3%B4%EC%A6%9D%EA%B8%88+%EB%B0%98%ED%99%98&display=20
+
+Fetching prec with ID '239521'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '239521'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=239521
+
+Fetching prec with ID '226751'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '226751'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=226751
+
+Fetching prec with ID '206299'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '206299'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=206299
+
+Fetching prec with ID '325608'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '325608'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=325608
+
+Fetching prec with ID '207174'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '207174'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=207174
+
+Fetching prec with ID '325102'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '325102'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=325102
+
+Fetching prec with ID '305086'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '305086'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=305086
+
+Fetching prec with ID '207180'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '207180'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=207180
+
+Fetching prec with ID '322450'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '322450'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=322450
+
+Fetching prec with ID '197932'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '197932'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=197932
+
+Fetching prec with ID '308686'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '308686'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=308686
+
+Fetching prec with ID '272094'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '272094'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=272094
+
+Fetching prec with ID '239976'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '239976'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=239976
+
+Fetching prec with ID '289602'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '289602'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=289602
+
+Fetching prec with ID '282136'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'ID': '282136'}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawService.do?OC=fujii0711&target=prec&type=XML&ID=282136
+
+Searching prec for '보증금 반환 동시이행'...
+params: {'OC': 'fujii0711', 'target': 'prec', 'type': 'XML', 'query': '보증금 반환 동시이행', 'display': 20}
+_get >>> GET:::  https://www.law.go.kr/DRF/lawSearch.do?OC=fujii0711&target=prec&type=XML&query=%EB%B3%B4%EC%A6%9D%EA%B8%88+%EB%B0%98%ED%99%98+%EB%8F%99%EC%8B%9C%EC%9D%B4%ED%96%89&display=20
+
+수집 완료 → /Users/fujii0711/Claude/privateLLM/data/raw
