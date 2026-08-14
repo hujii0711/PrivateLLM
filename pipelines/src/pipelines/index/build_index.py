@@ -1,4 +1,5 @@
 """청크 jsonl → Chroma 색인. 임베딩은 직접 계산해 전달."""
+
 import json
 from pathlib import Path
 
@@ -8,6 +9,7 @@ from .embedder import Embedder
 
 COLLECTION = "jeonse_deposit"
 _BATCH = 64
+
 
 # chunks_path: Path / jsonl 파일 경로
 # chroma_dir: Path / Chroma DB 저장 폴더
@@ -31,20 +33,22 @@ def build_index(*, chunks_path: Path, chroma_dir: Path, encode_fn=None) -> int:
     # chroma_dir.mkdir(parents=True, exist_ok=True)  # ✅
     # client = chromadb.PersistentClient(path=str(chroma_dir))  # str()로 다시 문자열 변환
 
-        # 1. 파일 전체를 문자열로 읽기
-        #text = Path(chunks_path).read_text(encoding="utf-8")
+    # 1. 파일 전체를 문자열로 읽기
+    # text = Path(chunks_path).read_text(encoding="utf-8")
 
-        # 2. 줄 단위로 분리
-        #lines = text.splitlines()
+    # 2. 줄 단위로 분리
+    # lines = text.splitlines()
 
-        # 3. 빈 줄 제거 (if ln.strip())
-        # 4. 각 줄을 JSON → 딕셔너리로 변환
-        #chunks = [json.loads(ln) for ln in lines if ln.strip()]
-    chunks = [
-        json.loads(ln)
-        for ln in Path(chunks_path).read_text(encoding="utf-8").splitlines()
-        if ln.strip()
-    ]
+    # 3. 빈 줄 제거 (if ln.strip())
+    # 4. 각 줄을 JSON → 딕셔너리로 변환
+    # chunks = [json.loads(ln) for ln in lines if ln.strip()]
+    chunks = [json.loads(ln) for ln in Path(chunks_path).read_text(encoding="utf-8").splitlines() if ln.strip()]
+    # 결과 포맷은 아래와 같다
+    # chunks = [
+    #     {"id": 1, "text": "hello"},
+    #     {"id": 2, "text": "world"},
+    #     {"id": 3, "text": "foo"}
+    # ]
     if not chunks:
         return 0
 
@@ -56,7 +60,7 @@ def build_index(*, chunks_path: Path, chroma_dir: Path, encode_fn=None) -> int:
     embedder = Embedder(encode_fn=encode_fn)
     chroma_dir = Path(chroma_dir)
     chroma_dir.mkdir(parents=True, exist_ok=True)
-    client = chromadb.PersistentClient(path=str(chroma_dir)) #문자열로 형변환
+    client = chromadb.PersistentClient(path=str(chroma_dir))  # 문자열로 형변환
     col = client.get_or_create_collection(COLLECTION, metadata={"hnsw:space": "cosine"})
 
     # _BATCH 가 100이라면, 100개씩 잘라서 처리
@@ -67,7 +71,7 @@ def build_index(*, chunks_path: Path, chroma_dir: Path, encode_fn=None) -> int:
     # i=100 → batch = chunks[100:200]  # 100개
     # i=200 → batch = chunks[200:250]  # 50개
     for i in range(0, len(chunks), _BATCH):
-        batch = chunks[i:i + _BATCH]
+        batch = chunks[i : i + _BATCH]
         # 임베딩 모델 호출 비용을 줄이고 메모리 사용량을 제한하기 위해 배치 단위로 처리한다.
         # [c["text"] for c in batch] — batch의 각 청크에서 "text" 값만 추출
         # embedder.embed(...) — 텍스트 리스트를 벡터로 변환
@@ -80,8 +84,7 @@ def build_index(*, chunks_path: Path, chroma_dir: Path, encode_fn=None) -> int:
             ids=[c["id"] for c in batch],
             documents=[c["text"] for c in batch],
             embeddings=embeddings,
-            metadatas=[{k: c[k] for k in ("source_type", "title", "ref", "url", "date")}
-                       for c in batch],
+            metadatas=[{k: c[k] for k in ("source_type", "title", "ref", "url", "date")} for c in batch],
         )
         # metadatas 부분 분해:
         # 딕셔너리 컴프리헨션
@@ -109,6 +112,7 @@ def build_index(*, chunks_path: Path, chroma_dir: Path, encode_fn=None) -> int:
     #     └─ id / 문서 / 벡터 / 메타데이터 → Chroma에 upsert
     #         ↓
     # 총 청크 수 반환
+
 
 def main() -> None:
     """환경 설정을 읽고 기본 청크 파일을 Chroma 색인으로 만든다."""

@@ -80,7 +80,7 @@ def build_messages(query: str, hits: list[Retrieved]) -> list[dict]:
 
     # enumerate(hits, 1) : 인덱스를 1부터 시작합니다 (0이 아닌 1-indexed)
     # i=1 → "[1]", i=2 → "[2]" 형식으로 번호를 붙입니다.
-    for i, h in enumerate(hits, 1):
+    for i, h in enumerate(hits, 1):  # enumerate(hits, 1)은 start=1을 위치 인자로 전달한 것과 같아서, 인덱스가 0이 아닌 1부터 시작합니다.
         # 각 근거 블록 형식: "[번호] (제목) 본문 텍스트"
         # 예: "[1] (주택임대차보호법 제3조의3) 임차인은..."
         blocks.append(f"[{i}] ({h.title}) {h.text}")

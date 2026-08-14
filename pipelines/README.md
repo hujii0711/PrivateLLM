@@ -59,3 +59,32 @@ source .env
 set +a
 
 uv run python -m pipelines.ingest.fetch_corpus
+
+---
+cd /Users/fujii0711/Claude/PrivateLLM/pipelines
+set -a
+source .env
+set +a
+uv run python -m pipelines.ingest.fetch_corpus
+
+---
+set -a / source .env / set +a 를 실행했는지 여부에 따라 os.environ.get("LAW_API_OC") 결과가 결정
+
+`>` set -a          # 이후 만들어지는 모든 변수를 자동으로 "export" 상태로 만듦
+set -a가 켜진 상태에서 .env를 읽으면, .env 안의 모든 변수 할당이 자동으로 export됩니다. 그래서 파이썬 같은 자식 프로세스에서도 보이게 됩니다.
+
+`>` source .env     # .env 파일의 내용을 현재 셸에서 실행 (변수 할당문들을 읽어들임)
+set -a 없이 그냥 source .env만 하면? 이 경우 .env 안의 LAW_API_OC=fujii0711은 현재 셸의 지역 변수로만 설정됩니다. export되지 않은 상태라 자식 프로세스(파이썬)에게 전달되지 않습니다.
+
+`>` set +a          # 자동 export 모드 해제 (원래 상태로 복귀)
+
+---
+왜 os.environ에 전달되려면 "export"가 필요한가?
+이건 유닉스/리눅스 프로세스 구조의 근본적인 원리입니다.
+셸(부모 프로세스)
+ ├─ 지역 변수(local variable)      → 자식 프로세스에 전달 안 됨
+ └─ 환경 변수(environment variable, export됨) → 자식 프로세스에 상속됨
+                                         │
+                                         ▼
+                                   python 프로세스 (자식)
+                                   os.environ = 상속받은 환경변수들만 담긴 딕셔너리

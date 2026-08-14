@@ -64,8 +64,10 @@ class Config:
         DATA_ROOT는 지정되지 않으면 저장소의 data 디렉터리를 기본값으로 쓴다.
         """
 
-        oc = os.environ.get("LAW_API_OC")
+        # os.environ.get("LAW_API_OC")의 값은 현재 셸(터미널)의 환경변수 설정 상태에 따라 달라집니다.
+        oc = os.environ.get("LAW_API_OC")  # 환경변수에서 LAW_API_OC를 읽어옵니다. 없으면 None 반환
 
+        # not oc는 "None이거나 빈 문자열이면 True" 라는 뜻
         if not oc:
             raise RuntimeError("LAW_API_OC 환경변수가 없습니다. pipelines/.env 를 설정하세요.")
         # os — 환경변수 읽기 (os.environ.get)
