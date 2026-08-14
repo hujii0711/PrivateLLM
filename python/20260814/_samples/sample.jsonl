@@ -1,0 +1,3 @@
+{"id": "b-001", "title": "파이썬 제너레이터 입문", "authors": ["김한결", "이도현"], "price": {"amount": 32000, "currency": "KRW"}, "rating": 4.5, "tags": ["python", "generator"], "in_stock": true}
+{"id": "b-002", "title": "Streaming XML at Scale", "authors": ["Dana Whitfield"], "price": {"amount": 49.99, "currency": "USD"}, "rating": 3.14, "tags": ["xml", "streaming"], "in_stock": false}
+{"id": "b-003", "title": "빈 필드가 많은 책", "authors": ["미상"], "price": {"amount": 0, "currency": "KRW"}, "rating": null, "tags": [], "in_stock": null}

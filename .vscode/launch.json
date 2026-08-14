@@ -1,0 +1,81 @@
+{
+  // python/20260814 하위 스크립트 디버그 구성.
+  //
+  // 대상 파일은 모두 표준 라이브러리만 쓰므로 별도 가상환경 없이
+  // VS Code에서 선택된 인터프리터로 그대로 실행된다.
+  // (인터프리터 변경: Ctrl+Shift+P → "Python: Select Interpreter")
+  //
+  // 공통 옵션 의도:
+  //   justMyCode=false  제너레이터·iterparse 등 표준 라이브러리 내부까지 스텝 인 하려고.
+  //                     학습용 코드라 라이브러리 동작을 따라 들어가는 게 핵심이다.
+  //   console           통합 터미널이라야 stdout/stderr가 그대로 보이고,
+  //                     입력 인자를 '-' 로 준 경우 stdin도 쓸 수 있다.
+  //   cwd               args의 상대 경로(_samples/...)가 깨지지 않도록 고정한다.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // 편집기에서 열려 있는 파일을 그대로 디버그한다.
+      // 20260814 폴더에 파일을 새로 추가해도 이 구성 하나로 F5가 동작하므로,
+      // 아래 개별 구성들을 늘려갈 필요가 없다.
+      "name": "Python: 현재 파일",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "cwd": "${fileDirname}",
+      "justMyCode": false
+    },
+    {
+      "name": "20260814: yield_basics.py",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/python/20260814/yield_basics.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/python/20260814",
+      "justMyCode": false
+    },
+    {
+      "name": "20260814: yield_demo.py",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/python/20260814/yield_demo.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/python/20260814",
+      "justMyCode": false
+    },
+    {
+      // --coerce, --include-tag 를 켜 둬서 타입 추론과 _tag 삽입 분기까지
+      // 한 번의 실행으로 모두 지나간다. 중단점은 element_to_obj/iter_records 에.
+      "name": "20260814: xml_to_jsonl.py (샘플)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/python/20260814/xml_to_jsonl.py",
+      "args": [
+        "_samples/sample.xml",
+        "-o",
+        "_samples/out/sample.jsonl",
+        "--coerce",
+        "--include-tag"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/python/20260814",
+      "justMyCode": false
+    },
+    {
+      "name": "20260814: jsonl_to_json.py (샘플)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/python/20260814/jsonl_to_json.py",
+      "args": [
+        "_samples/sample.jsonl",
+        "-o",
+        "_samples/out/sample.json",
+        "--indent",
+        "2"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/python/20260814",
+      "justMyCode": false
+    }
+  ]
+}

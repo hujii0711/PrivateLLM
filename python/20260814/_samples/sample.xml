@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  xml_to_jsonl.py 디버그용 샘플.
+
+  element_to_obj()의 변환 분기를 한 번씩 밟도록 구성했다.
+    * 속성          -> "@id", "@lang"
+    * 반복 태그      -> author 두 개가 리스트로 합쳐짐
+    * 중첩          -> price 안의 amount/currency
+    * 텍스트+속성 공존 -> "#text" 키가 생기는 경우
+    * 빈 엘리먼트     -> None
+    * 네임스페이스     -> keep-namespaces 옵션을 주지 않으면 접두사가 벗겨짐
+    * coerce 대상     -> "true"/"3.14"/"1999" 는 변환, "007" 은 앞자리 0이라 문자열 유지
+
+  (XML 주석 안에는 하이픈 두 개를 연달아 쓸 수 없어 옵션 이름의 접두 하이픈은 생략했다.)
+-->
+<catalog xmlns:meta="urn:example:meta">
+  <book id="b-001" lang="ko">
+    <title>파이썬 제너레이터 입문</title>
+    <author>김한결</author>
+    <author>이도현</author>
+    <price currency="KRW">
+      <amount>32000</amount>
+      <discounted>true</discounted>
+    </price>
+    <rating>4.5</rating>
+    <isbn>007</isbn>
+    <meta:source>내부 자료</meta:source>
+    <note/>
+  </book>
+  <book id="b-002" lang="en">
+    <title lang="en">Streaming XML at Scale</title>
+    <author>Dana Whitfield</author>
+    <price currency="USD">
+      <amount>49.99</amount>
+      <discounted>false</discounted>
+    </price>
+    <rating>3.14</rating>
+    <isbn>9780000000002</isbn>
+    <published>1999</published>
+    <note/>
+  </book>
+  <book id="b-003" lang="ko">
+    <title>빈 필드가 많은 책</title>
+    <author>미상</author>
+    <price currency="KRW">
+      <amount>0</amount>
+      <discounted>null</discounted>
+    </price>
+    <rating/>
+    <isbn/>
+    <note>재고 없음</note>
+  </book>
+</catalog>
