@@ -123,7 +123,7 @@ def run_chat(
     # retriever.retrieve(query) 는 질문과 의미적으로 유사한 법령·판례 문서를
     # 벡터 유사도 검색으로 찾아 반환합니다.
     hits = retriever.retrieve(query)
-
+    # pprint.pprint(hits, indent=4)
     # ── Step 2: 근거 품질 판정 ───────────────────────────────
     # is_grounded(hits) 는 검색된 문서들이 질문에 답하기에 충분한지 검사합니다.
     # 관련성이 낮은 문서만 반환됐다면 False 를 반환합니다.
@@ -137,6 +137,7 @@ def run_chat(
     # build_messages : 시스템 지시문 + 검색 결과(법령 본문 등) + 사용자 질문을
     # OpenAI 호환 메시지 형식([{"role": ..., "content": ...}, ...])으로 조립합니다.
     messages = build_messages(query, hits)
+    # pprint.pprint(messages, indent=4)
 
     # ── Step 4: LLM 스트리밍 생성 ───────────────────────────
     parts: list[str] = []  # 생성된 토큰 조각들을 나중에 합치기 위해 저장
@@ -155,7 +156,7 @@ def run_chat(
     # 잘못된 인용 번호를 제거합니다. (예: [99] 처럼 실제로 없는 번호)
     # _ensure_disclaimer       : 면책 문구가 없으면 추가합니다.
     answer = _ensure_disclaimer(strip_invalid_citations(raw, hits))
-
+    # print(f"[run_chat] answer:\n{answer}")
     # extract_sources : 최종 답변에서 실제로 참조된 출처 목록만 추출합니다.
     # 딕셔너리 컴프리헨션으로 SourceOut 스키마에 맞게 변환합니다.
     sources = [

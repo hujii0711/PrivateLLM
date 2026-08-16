@@ -53,9 +53,9 @@ class QueryEmbedder:
                          테스트 시 임의의 함수를 주입해 모델 로딩 없이 테스트 가능합니다.
             model_name : 사용할 SentenceTransformer 모델 이름 (Hugging Face 경로)
         """
-        self._encode_fn = encode_fn   # 주입된 인코더 함수 (None 이면 실제 모델 사용)
+        self._encode_fn = encode_fn  # 주입된 인코더 함수 (None 이면 실제 모델 사용)
         self._model_name = model_name  # 모델 이름 저장
-        self._model = None             # 모델은 아직 로드하지 않음 (지연 로딩)
+        self._model = None  # 모델은 아직 로드하지 않음 (지연 로딩)
 
     def _lazy(self, texts: list[str]) -> list:
         """SentenceTransformer 모델을 처음 필요한 시점에 로드하고 인코딩합니다.
@@ -80,13 +80,33 @@ class QueryEmbedder:
             # 모델을 지정한 장치에 로드합니다.
             self._model = SentenceTransformer(self._model_name, device=device)
 
-        # normalize_embeddings=True : 벡터의 크기(norm)를 1로 정규화합니다.
+        # normalize_embeddings=True : 벡터의 크기(norm)를 1로 정규화합니다. 이렇게 하면 나중에 두 벡터가 얼마나 비슷한지 비교할 때(코사인 유사도) 계산이 더 간단하고 일관성 있어져요.
         # 정규화된 벡터끼리의 내적(dot product)이 곧 코사인 유사도가 됩니다.
         # ChromaDB 가 코사인 거리를 사용하므로 반드시 정규화해야 합니다.
+        # ChromaDB 는 벡터를 float32 로 저장하므로, SentenceTransformer 가 반환하는 float64 를 float32 로 변환합니다. --> texts를 벡터로 변환
+        # texts = ["보증금 반환 소송 절차가 어떻게 되나요?"]  # 원소 1개짜리 리스트
+        # # ↓ encode 후
+        # vecs = [ [0.1, 0.2, ..., 0.9] ]  # 벡터 1개가 리스트 안에 들어있음
         vecs = self._model.encode(texts, normalize_embeddings=True)
 
-        # numpy 배열을 파이썬 기본 list 로 변환합니다.
+        # numpy 배열을 순수 파이썬 기본 list 로 변환합니다.
         # ChromaDB 는 파이썬 list 형식을 요구합니다.
+        # vecs는 numpy 배열들의 모음인데, 이걸 파이썬 기본 리스트로 바꿔주는 부분이에요.
+        # 왜 바꿀까요? numpy 배열은 JSON으로 저장하거나 다른 시스템에 전달할 때 호환이 안 되는 경우가 많아서, 순수 파이썬 list로 변환해두면 다루기 편하거든요.
+
+        # vecs = array([
+        #     [0.0123, -0.0451, 0.0892, ..., 0.0034]   # 문장의 벡터, numpy array, 원소 1024개
+        # ])
+
+        # v = array([0.0123, -0.0451, 0.0892, ..., 0.0034])  # numpy array
+        # v.tolist() → [0.0123, -0.0451, 0.0892, ..., 0.0034]  # 파이썬 list
+
+        # [
+        #     [0.0123, -0.0451, 0.0892, ..., 0.0034]   # 문장의 임베딩 (float 1024개)
+        # ]
+        # type(vecs) → numpy.ndarray
+        # vecs.shape → (2, 1024)  ← (문장 개수, 벡터 차원)
+
         return [v.tolist() for v in vecs]
 
     def embed_query(self, query: str) -> list:
@@ -106,4 +126,6 @@ class QueryEmbedder:
 
         # fn([query]) : 리스트로 감싸서 호출 (배치 처리 API)
         # [0]         : 결과 리스트의 첫 번째(유일한) 벡터를 꺼냄
+        # fn([query])   # → [[0.1, 0.2, ..., 0.9]]  (리스트 안에 벡터 1개)
+        # fn([query])[0]  # → [0.1, 0.2, ..., 0.9]   (벡터 자체)
         return fn([query])[0]

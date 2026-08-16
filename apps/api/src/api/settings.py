@@ -42,6 +42,13 @@ class Settings:
         temperature: 생성 무작위성 (0 = 결정론적, 1 = 창의적)
     """
 
+    # Settings(
+    #     rag=RagConfig(chroma_dir=PosixPath('/Users/fujii0711/Claude/PrivateLLM/data/chroma'),collection='jeonse_deposit', model_name='BAAI/bge-m3', top_k=6, min_similarity=0.35),
+    #     mlx_model='mlx-community/Qwen2.5-7B-Instruct-4bit',
+    #     max_tokens=768,
+    #     temperature=0.2
+    # )
+
     # field(default_factory=...) 는 가변(mutable) 기본값을 안전하게 지정하는 방법입니다.
     # 단순히 rag: RagConfig = RagConfig.from_env() 처럼 쓰면 모든 인스턴스가
     # 같은 객체를 공유하는 버그가 생기므로, default_factory 를 사용합니다.
