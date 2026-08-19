@@ -24,12 +24,14 @@ WebSocket 보다 단순하며, LLM 처럼 토큰을 하나씩 보낼 때 자주 
     $ uvicorn api.main:app --reload
 """
 
+import asyncio  # 비동기 I/O 처리를 위한 표준 라이브러리
 import json  # Python 딕셔너리 ↔ JSON 문자열 변환 표준 라이브러리
 
 from fastapi import FastAPI
 
 # FastAPI : 고성능 웹 프레임워크. 타입 힌트 기반 자동 검증 및 문서 생성 기능 제공.
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 
 # CORSMiddleware : 브라우저의 동일 출처 정책(Same-Origin Policy)을 우회해
 #   프론트엔드(localhost:3000)가 API 서버(localhost:8000)에 요청할 수 있게 합니다.
@@ -135,6 +137,37 @@ def create_app(
         # EventSourceResponse 는 event_gen() 제너레이터를 받아
         # SSE 프로토콜에 맞는 HTTP 스트리밍 응답을 만들어 줍니다.
         return EventSourceResponse(event_gen())
+
+    @app.get("/stream")
+    async def message_stream():
+        async def event_generator():
+            for i in range(20):
+                await asyncio.sleep(1)
+
+                # 딕셔너리 형태로 yield하면 sse-starlette가 알아서 SSE 규격으로 변환해 줍니다.
+                yield {"event": "message", "data": f"SSE 스트리밍 메시지 {i}번째"}
+
+            # 마지막 완료 이벤트 전송 예시
+            yield {"event": "complete", "data": "모든 전송이 완료되었습니다."}
+
+        return EventSourceResponse(event_generator())
+
+    @app.get("/stream_old")
+    async def stream_endpoint():
+        # StreamingResponse에 제너레이터 함수를 전달하고, 미디어 타입을 text/event-stream으로 설정
+        async def fake_data_streamer():
+            """데이터를 실시간으로 생성하여 yield하는 제너레이터 함수
+            비동기(async def)와 비동기 제너레이터(async for / await asyncio.sleep)를
+            사용하면 실제 I/O 대기 시간 동안 서버가 멈추지 않습니다.
+            """
+            for i in range(20):
+                # 1초 대기 (실제 환경에서는 DB 조회, 외부 API 호출, LLM 토큰 생성 등이 될 수 있음)
+                await asyncio.sleep(1)
+
+                # 문자열이나 바이트 데이터를 yield하면 클라이언트로 즉시 전송됨
+                yield f"data: 딥테크 스트리밍 메시지 {i}번째\n\n"
+
+        return StreamingResponse(fake_data_streamer(), media_type="text/event-stream")
 
     return app
 
