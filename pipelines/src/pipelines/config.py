@@ -27,8 +27,10 @@ class Config:
     oc: str
 
     # @property는 메서드를 속성처럼 접근하게 해 줍니다.
-    # pythonconfig.raw_dir()  # ❌ 괄호 필요 없음
-    # config.raw_dir    # ✅ 이렇게 접근
+    # cfg = Config.from_env()
+    # cfg.raw_dir()  # ❌ 괄호 필요 없음
+    # cfg.raw_dir  # ✅ 이렇게 접근
+
     @property
     def raw_dir(self) -> Path:
         """수집 단계가 원천 JSON을 저장하고 이후 단계가 읽는 디렉터리."""
