@@ -48,3 +48,9 @@ select = ["E", "W", "F", "I", "UP", "B"]
 [tool.ruff.lint.isort]
 known-first-party = ["rag", "api", "pipelines", "eval", "ftdata", "finetune"]
 
+# 모듈 선언 순서
+# 1 __future__
+# 2 표준 라이브러리 (os, json, pathlib …)
+# 3 서드파티 (numpy, fastapi, requests …)
+# 4 first-party = 내 프로젝트 코드 ← 이 목록이 지정하는 것
+# 5 로컬 상대 import (from .utils import ...)

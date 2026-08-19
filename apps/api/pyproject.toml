@@ -43,6 +43,10 @@ dev = ["pytest>=8.0", "httpx>=0.27"]
 # dependencies에 "rag"가 있었는데, 이 rag는 외부에서 다운로드하는 패키지가 아니라 현재 저장소 안의
 # [packages/rag (line 1)](/Users/fujii0711/Claude/PrivateLLM/packages/rag/pyproject.toml:1)를
 # 사용하라는 뜻입니다. 쉽게 말하면: api 서버는 같은 저장소 안에 있는 rag 코드를 가져다 쓴다.
+# [tool.uv.sources] 가 없으면 PyPI를 뒤진다
+# 이게 핵심입니다. dependencies 에 "rag" 만 적고 끝냈다면 uv는 PyPI에 올라온 rag 라는 패키지를 찾으러 갑니다. 남의 패키지를 설치하거나 못 찾아 실패하죠.
+# packages/ftdata/pyproject.toml:15-19 의 { workspace = true } 가 "이 이름은 PyPI 말고 우리 워크스페이스 멤버에서 해석하라"고 경로를 갈아끼웁니다. 그래서 짝이 반드시 맞아야 합니다 — dependencies 에만 적고 sources 에 빠뜨리면 조용히 PyPI를 보러 갑니다.
+# 이 구조를 쓰는 이유는 sources 가 uv 전용 확장이고 배포 메타데이터에 포함되지 않기 때문입니다. 즉 dependencies 쪽은 표준 그대로 유지한 채, 로컬 개발 시에만 출처를 바꿔치기하는 방식입니다.
 [tool.uv.sources]
 rag = { workspace = true }
 
